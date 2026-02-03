@@ -159,7 +159,7 @@ def juego_coordinador():
             else:
                 c.send(f"❌ Incorrecta. Respuesta correcta: {correcta}\n".encode())
 
-    # ───────── Resultados partida ─────────
+    # ───────── Resultados partida (clientes) ─────────
     ranking = sorted(puntos.items(), key=lambda x: x[1], reverse=True)
     final = "\n🏁 RESULTADOS PARTIDA 🏁\n"
     for i, (n, p) in enumerate(ranking, 1):
@@ -168,16 +168,17 @@ def juego_coordinador():
     for c, _ in jugadores:
         c.send(final.encode())
 
-    # Guardar y mostrar clasificación general
+    # Guardar clasificación
     guardar_clasificacion(puntos)
+
+    # ───────── Clasificación general SOLO servidor ─────────
     general = leer_clasificacion_general()
 
-    mensaje = "\n🏆 CLASIFICACIÓN GENERAL 🏆\n"
+    print("\n🏆 CLASIFICACIÓN GENERAL (SERVIDOR) 🏆")
     for i, (n, p) in enumerate(general, 1):
-        mensaje += f"{i}. {n} -> {p} puntos\n"
+        print(f"{i}. {n} -> {p} puntos")
 
     for c, _ in jugadores:
-        c.send(mensaje.encode())
         c.close()
 
     jugadores.clear()
